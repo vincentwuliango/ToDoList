@@ -1,43 +1,45 @@
+import java.util.Scanner;
+
 public class Run {
 	public static String[] model = new String[10];
 	public static int count = 0;
 	
 	public static void main(String[] args) {
-		testRemoveTodo();
+		viewShowTodoList();
 	}
 	
 	/**
 	 * Display todo list
 	 */
 	public static void showTodoList() {
-		/**
-		 * Display exists data
-		 */
-		System.out.println("TODO LIST");
 		count = 0;
+		System.out.println("TODO LIST");
 		for (int i = 0; i < model.length; i++) {
+			/**
+			 * Only display non-null model
+			 */
 			if (model[i] != null) {
 				count += 1;
-				System.out.println((i + 1) + ". " + model[i]);
+				System.out.println(i + 1 + ". " + model[i]);
 			}
 		}
 	}
 	
 	public static void testShowTodoList() {
 		model[0] = "OOP";
-		model[1] = "Java";
+		model[1] = "Todo";
 		
 		showTodoList();
 	}
 	
 	/**
-	 * Add data to todo list
+	 * Add todo
 	 *
 	 * @param todo
 	 */
 	public static void addTodo(String todo) {
 		/**
-		 *Check model memory
+		 * Check model memory size left
 		 */
 		var isFull = true;
 		for (int i = 0; i < model.length; i++) {
@@ -48,7 +50,7 @@ public class Run {
 		}
 		
 		/**
-		 * Increase model memory
+		 * if full, add memory size
 		 */
 		if (isFull) {
 			var temp = model;
@@ -60,7 +62,7 @@ public class Run {
 		}
 		
 		/**
-		 * Add data to latest index
+		 * Add data to latest model index
 		 */
 		for (int i = 0; i < model.length; i++) {
 			if (model[i] == null) {
@@ -72,14 +74,14 @@ public class Run {
 	
 	public static void testAddTodo() {
 		for (int i = 0; i < 25; i++) {
-			addTodo("Java OOP " + (i + 1));
+			addTodo("Todo");
 		}
 		
 		showTodoList();
 	}
 	
 	/**
-	 * Remove data from todo list
+	 * remove todo
 	 *
 	 * @param number
 	 */
@@ -90,7 +92,7 @@ public class Run {
 				System.out.println("No data found");
 				return false;
 			} else {
-				for (int i = idx; i < count; i++) {
+				for (int i = idx; i < model.length; i++) {
 					if (i == count) {
 						model[idx] = null;
 						return true;
@@ -98,7 +100,7 @@ public class Run {
 						model[i] = model[number];
 					}
 				}
-//				System.out.println("Data " + number + ". " + model[idx] + " has been deleted");
+				System.out.println("Data " + number + ". " + model[idx] + " has been deleted");
 				showTodoList();
 				return true;
 			}
@@ -109,33 +111,115 @@ public class Run {
 	}
 	
 	public static void testRemoveTodo() {
-		addTodo("Java");
-		addTodo("OOP");
-		addTodo("Is");
-		addTodo("Fun");
+		addTodo("One");
+		addTodo("Two");
+		addTodo("Three");
+		addTodo("Four");
+		addTodo("Five");
+		addTodo("Six");
 		
 		showTodoList();
+		removeTodo(1);
 		removeTodo(5);
 	}
 	
-	/**
-	 * View menu todo list
-	 */
+	public static String input(String info) {
+		System.out.print(info + " : ");
+		Scanner scan = new Scanner(System.in);
+		String data = scan.nextLine();
+		return data;
+	}
+	
+	public static void testInput() {
+		System.out.println("Hi " + input("Name"));
+	}
+	
 	public static void viewShowTodoList() {
-	
+		var choice = true;
+		
+		while (choice) {
+			showTodoList();
+			
+			System.out.println("Menu");
+			System.out.println("1. Add");
+			System.out.println("2. Remove");
+			System.out.println("x. Exit");
+			
+			var input = input("Input: ");
+			
+			switch (input) {
+				case "1":
+					viewAddTodo();
+					break;
+				case "2":
+					viewRemoveTodo();
+					break;
+				case "x":
+					choice = false;
+					System.out.println("Close program...");
+					break;
+				default:
+					System.out.println("Wrong input");
+			}
+		}
 	}
 	
-	/**
-	 * View menu for add todo
-	 */
+	public static void testViewTodoList() {
+		addTodo("One");
+		addTodo("Two");
+		addTodo("Three");
+		addTodo("Four");
+		
+		viewShowTodoList();
+	}
+	
 	public static void viewAddTodo() {
-	
+		System.out.println("ADD TODO");
+		var todo = input("Todo (x to exit): ");
+		
+		if (todo.equals("x")) {
+			System.out.println("Back to main menu");
+		} else {
+			addTodo(todo);
+		}
 	}
 	
-	/**
-	 * View menu for remove todo
-	 */
-	public static void removeTodo() {
+	public static void testViewAddTodo() {
+		addTodo("One");
+		
+		viewAddTodo();
+		showTodoList();
+	}
 	
+	public static void viewRemoveTodo() {
+		System.out.println("REMOVE TODO");
+		
+		if (count <= 0) {
+			System.out.println("No data");
+			return;
+		}
+		
+		var number = input("Choose " + "[1-" + count + "]" + " (x to exit)");
+		
+		if (number.equals("x")) {
+			System.out.println("Back to main menu");
+		} else {
+			boolean success = removeTodo(Integer.valueOf(number));
+			if (!success) {
+				System.out.println("Remove todo failed, " + number);
+			} else {
+				System.out.println("Delete success");
+			}
+		}
+	}
+	
+	public static void testViewRemoveTodo() {
+		addTodo("One");
+		addTodo("Two");
+		addTodo("Three");
+		
+		showTodoList();
+		viewRemoveTodo();
+		showTodoList();
 	}
 }
