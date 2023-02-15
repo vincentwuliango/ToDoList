@@ -100,7 +100,6 @@ public class Run {
 						model[i] = model[number];
 					}
 				}
-				System.out.println("Data " + number + ". " + model[idx] + " has been deleted");
 				showTodoList();
 				return true;
 			}
