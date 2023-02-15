@@ -92,15 +92,14 @@ public class Run {
 				System.out.println("No data found");
 				return false;
 			} else {
-				for (int i = idx; i < model.length; i++) {
-					if (i == count) {
-						model[idx] = null;
-						return true;
+				
+				for (int i = idx; i < count; i++) {
+					if (i == count-1) {
+						model[i] = null;
 					} else {
 						model[i] = model[number];
 					}
 				}
-				showTodoList();
 				return true;
 			}
 		} else {
